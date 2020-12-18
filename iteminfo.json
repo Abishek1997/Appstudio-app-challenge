@@ -1,0 +1,53 @@
+{
+    "access": "public",
+    "accessInformation": "AppStudio team",
+    "appCategories": [
+    ],
+    "avgRating": 0,
+    "banner": null,
+    "categories": [
+    ],
+    "commentsEnabled": true,
+    "created": 1502495568000,
+    "culture": "en-au",
+    "description": "",
+    "documentation": null,
+    "extent": [
+    ],
+    "groupDesignations": null,
+    "guid": null,
+    "industries": [
+    ],
+    "languages": [
+    ],
+    "largeThumbnail": null,
+    "licenseInfo": null,
+    "listed": false,
+    "modified": 1576716594000,
+    "numComments": 5,
+    "numRatings": 0,
+    "numViews": 1295,
+    "orgId": "2U3NfasNQ9o9LkLt",
+    "properties": null,
+    "proxyFilter": null,
+    "scoreCompleteness": 80,
+    "screenshots": [
+    ],
+    "size": 46093,
+    "snippet": "A simple note-taking application",
+    "spatialReference": null,
+    "subInfo": 0,
+    "thumbnail": "thumbnail/thumbnail.png",
+    "title": "Notes",
+    "type": "Native Application",
+    "typeKeywords": [
+        "API_QML",
+        "App",
+        "Application",
+        "AppStudio",
+        "Configuration",
+        "Native",
+        "qml"
+    ],
+    "url": null
+}
