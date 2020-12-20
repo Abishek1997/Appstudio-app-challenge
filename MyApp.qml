@@ -1,4 +1,4 @@
-﻿/* Copyright 2020 Esri
+﻿    /* Copyright 2020 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,14 @@ import QtQuick.Layouts 1.13
 import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.13
 import QtGraphicalEffects 1.0
-import "./view"
-import "./assets"
-import "./controller"
-import "./model"
-
 import ArcGIS.AppFramework 1.0
+
+import "view"
+import "assets"
+import "widgets"
+import "model"
+import "controller"
+
 
 App{
     id: app
@@ -60,12 +62,25 @@ App{
     readonly property real subtitleFontSize: 1.1 * app.baseFontSize
     readonly property real captionFontSize: 0.6 * app.baseFontSize   
 
-    // Load Page1 as your default page
+    Component.onCompleted: {
+        dataModel.initDatabase()
+    }
+
+    DataModelController{
+        id: controller
+    }
+
+    DataModel {
+        id: dataModel
+        dispatcher: controller
+    }
+
     Loader{
         id: loader
         anchors.fill: parent
-        sourceComponent: page1ViewPage
+        sourceComponent: homePageView
     }
+
     Rectangle{
         id: mask
         anchors.fill: parent
@@ -89,10 +104,7 @@ App{
                 drawer.close();
                 switch(action){
                 case "page1":
-                    loader.sourceComponent = page1ViewPage;
-                    break;
-                case "about":
-                    loader.sourceComponent = aboutViewPage;
+                    loader.sourceComponent = homePageView;
                     break;
                 default:
                     break;
@@ -106,28 +118,43 @@ App{
         id: drawerModel
         ListElement {action:"page1"; type: "delegate"; name: qsTr("Home"); iconSource: ""}
         ListElement {action:""; type: "divider"; name: ""; iconSource: ""}
-        ListElement {action:"about"; type: "delegate"; name: qsTr("About"); iconSource: ""}
 
     }
 
+    StackView {
+        id: mainStackView
+        anchors.fill: parent
+        initialItem: homePageView
+    }
+
     Component{
-        id: page1ViewPage
+        id: homePageView
         HomePage{
-            titleText: qsTr("Home")
-            descText: qsTr("This is page 1")
             onOpenMenu: {
                 drawer.open();
+            }
+            onAddTodo: {
+                mainStackView.push(notesDetailsPageView)
+            }
+            onUpdateTodo: {
+                console.log(updateTitle, updateNotes)
+                mainStackView.push(notesDetailsPageView, {notesIndex: updateIndex, titleText: updateTitle, descText: updateNotes})
             }
         }
     }
 
     Component{
-        id: aboutViewPage
-        AboutPage{
-            titleText: qsTr("About")
-            descText: qsTr("This is an about page")
-            onOpenMenu: {
+        id: notesDetailsPageView
+        NotesDetailsPage{
+
+            onOpenMenuFromDetails: {
                 drawer.open();
+            }
+            onDiscard: {
+                mainStackView.pop();
+            }
+            onSaveTodo: {
+                mainStackView.pop();
             }
         }
     }

@@ -3,22 +3,36 @@ import QtQuick.Layouts 1.13
 import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.13
 import ArcGIS.AppFramework 1.0
+import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Material.impl 2.12
+
+import "../widgets"
 
 Page {
     id:page
-    signal openMenu()
-    property string titleText:""
+
+    signal openMenu();
+    signal addTodo();
+    signal updateTodo(int updateIndex, string updateTitle, string updateNotes)
+
     property var descText
+
+    Component.onCompleted: {
+        console.log('starting');
+    }
+
+
     header: ToolBar{
         contentHeight: 56*app.scaleFactor
-        Material.primary: app.primaryColor
+        Material.primary: "#303740"
         RowLayout {
             anchors.fill: parent
             spacing: 0
-            Item{
-                Layout.preferredWidth: 4*app.scaleFactor
-                Layout.fillHeight: true
+
+            CustomHorizontalSpacing{
+                size: 4
             }
+
             ToolButton {
                 indicator: Image{
                     width: parent.width*0.5
@@ -32,18 +46,14 @@ Page {
                     openMenu();
                 }
             }
-            Item{
-                Layout.preferredWidth: 20*app.scaleFactor
-                Layout.fillHeight: true
+
+            CustomHorizontalSpacing{
+                size: 15
             }
-            Label {
-                Layout.fillWidth: true
-                text: titleText
-                elide: Label.ElideRight
-                horizontalAlignment: Qt.AlignLeft
-                verticalAlignment: Qt.AlignVCenter
-                font.pixelSize: app.subtitleFontSize
-                color: app.headerTextColor
+
+            CustomTitle{
+                text: "Home"
+                fontSize: 16
             }
 
             ToolButton {
@@ -57,25 +67,36 @@ Page {
                     fillMode: Image.PreserveAspectFit
                     mipmap: true
                 }
-                onClicked: {
-                    optionsPanel.toggle()
+                onClicked:{
+                    addTodo();
                 }
             }
         }
     }
 
     Rectangle{
+        color: "#262626"
         anchors.fill: parent
-        color: app.appBackgroundColor
 
-        Label{
-            Material.theme: app.lightTheme? Material.Light : Material.Dark
-            anchors.centerIn: parent
-            font.pixelSize: app.titleFontSize
-            font.bold: true
-            wrapMode: Text.Wrap
-            padding: 16*app.scaleFactor
-            text: descText > ""? descText:""
+        ListView{
+            id: listView
+            width: parent.width
+            height: parent.height
+
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            spacing: 5
+
+            model: dataModel.listModel
+            delegate: RoundedListItem{
+                title: titleText
+                details: notesText
+                index: id
+            }
         }
     }
 }
