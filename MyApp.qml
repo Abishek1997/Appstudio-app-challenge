@@ -138,7 +138,8 @@ App{
             }
             onUpdateTodo: {
                 console.log(updateTitle, updateNotes)
-                mainStackView.push(notesDetailsPageView, {notesIndex: updateIndex, titleText: updateTitle, descText: updateNotes})
+                mainStackView.push(notesDetailsPageView, {notesIndex: updateIndex, titleText: updateTitle, descText: updateNotes});
+                controller.readImagePath(updateIndex);
             }
         }
     }

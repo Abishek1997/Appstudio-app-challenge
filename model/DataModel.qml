@@ -3,13 +3,20 @@ import QtQuick.LocalStorage 2.12
 
 Item {
     property var db;
+    property var imagesDb;
+
     readonly property alias todos: _.todos
     readonly property alias todoDetails: _.todoDetails
     property alias dispatcher: dataModelConnections.target
     readonly property alias listModel: listModel
+    readonly property alias imagePathModel: imagePathModel
 
     ListModel {
         id: listModel
+    }
+
+    ListModel {
+        id: imagePathModel
     }
 
     Connections{
@@ -50,7 +57,6 @@ Item {
                 if (result.rows.length === 1){
                     print("Updating existing data...");
                     result = tx.executeSql('DELETE FROM notesTable where id = ?', queryID);
-                    controller.readData();
                 }
                 result = tx.executeSql('INSERT INTO notesTable VALUES (?,?)', [queryID, JSON.stringify(obj)]);
             })
@@ -58,7 +64,7 @@ Item {
         }
 
         onDeleteData: {
-            print("deleteData()")
+            print("deleteData()");
             if (!db){
                 return;
             }
@@ -73,17 +79,58 @@ Item {
             })
             controller.readData();
         }
+
+        onStoreImagePath: {
+            print("storing image path..");
+            if(!imagesDb){
+                return;
+            }
+            imagesDb.transaction (function(tx){
+                var result = tx.executeSql('SELECT * FROM imagesPathTable WHERE id = (?)', queryID);
+                var obj = { id: queryID, imagePath: filePath};
+                if (result.rows.length === 1){
+                    print("Updating existing data...");
+                    result = tx.executeSql('DELETE FROM imagesPathTable where id = (?)', queryID);
+                }
+                result = tx.executeSql('INSERT INTO imagesPathTable VALUES (?,?)', [queryID, JSON.stringify(obj)]);
+            });
+            controller.readImagePath(queryID);
+        }
+
+        onReadImagePath: {
+            imagePathModel.clear();
+            print ("reading stored image path..")
+            if (!imagesDb){
+                return;
+            }
+            imagesDb.transaction( function(tx) {
+                print("reading image path data...");
+                var result = tx.executeSql("SELECT * FROM imagesPathTable WHERE id = (?)", queryID);
+                if (result.rows.length > 0){
+                    print('data available...');
+                    console.log(`id: ${result.rows[0].id}, path: ${result.rows[0].path}`)
+                    imagePathModel.append(JSON.parse(result.rows[0].path));
+                    console.log("image listmodel length: ", imagePathModel.count)
+                }
+            });
+        }
     }
 
     function initDatabase(){
 
-        print("initializing database, initDatabase()");
+        print("initializing notes database, initDatabase()");
         db = LocalStorage.openDatabaseSync("NotesStorage", "1.0", "Stores all the notes entered", 1000);
         db.transaction(function (tx){
-            print('Creating table if it does not exist...');
+            print('Creating notes table if it does not exist...');
             tx.executeSql('CREATE TABLE IF NOT EXISTS notesTable(id NUMBERIC, value TEXT)');
         });
         controller.readData();
+        print("initializing images database, initDatabase()");
+        imagesDb = LocalStorage.openDatabaseSync("ImagePathStorage", "1.0", "Stores the images path of selected images", 1000);
+        imagesDb.transaction( function(tx) {
+            print("Creating images table if it does not exist");
+            tx.executeSql('CREATE TABLE IF NOT EXISTS imagesPathTable(id NUMERIC, path TEXT)')
+        });
     }
 
 //    function clearDatabase(){
