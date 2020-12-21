@@ -69,7 +69,6 @@ Page{
                         Layout.preferredWidth: 24*app.scaleFactor
                         Layout.preferredHeight: 24*app.scaleFactor
                         radius: 12*app.scaleFactor
-                        anchors.fill: parent.verticalCenter
                         color: listView.currentIndex === index? app.accentColor : "#9E9E9E"
                     }
                     Item{

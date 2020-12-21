@@ -63,7 +63,7 @@ Page {
                     anchors.centerIn: parent
                     horizontalAlignment: Qt.AlignRight
                     verticalAlignment: Qt.AlignVCenter
-                    source: "../assets/plus.png"
+                    source: "../assets/icons8-add-bookmark-48.png"
                     fillMode: Image.PreserveAspectFit
                     mipmap: true
                 }

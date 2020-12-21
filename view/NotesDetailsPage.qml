@@ -24,7 +24,7 @@ Page {
     header: ToolBar{
         id: toolbar
         contentHeight: 56*app.scaleFactor
-        Material.primary: "#52057b"
+        Material.primary: "#303740"
         RowLayout {
             anchors.fill: parent
             spacing: 0
@@ -34,7 +34,7 @@ Page {
                     width: parent.width*0.5
                     height: parent.height*0.5
                     anchors.centerIn: parent
-                    source: "../assets/left-arrow.png"
+                    source: "../assets/icons8-back-48.png"
                     fillMode: Image.PreserveAspectFit
                     mipmap: true
                 }
@@ -48,7 +48,7 @@ Page {
             }
 
             CustomTitle{
-                text: "Add/ Edit details"
+                text: "Add/ Edit Notes"
                 fontSize: 16
             }
 
@@ -59,7 +59,7 @@ Page {
                     anchors.centerIn: parent
                     horizontalAlignment: Qt.AlignRight
                     verticalAlignment: Qt.AlignVCenter
-                    source: "../assets/check-mark.png"
+                    source: "../assets/icons8-checkmark-48.png"
                     fillMode: Image.PreserveAspectFit
                     mipmap: true
                 }
@@ -84,7 +84,7 @@ Page {
                     anchors.centerIn: parent
                     horizontalAlignment: Qt.AlignRight
                     verticalAlignment: Qt.AlignVCenter
-                    source: "../assets/more.png"
+                    source: "../assets/icons8-more-48.png"
                     fillMode: Image.PreserveAspectFit
                     mipmap: true
                 }
@@ -119,15 +119,83 @@ Page {
         anchors.fill: parent
         color: "#262626"
 
+        Row {
+            id: additionalFormatsRow
+            width: parent.width
+            height: parent.height * 0.1
+
+            Rectangle {
+                id: imageRect
+                width: parent.width / 2
+                anchors.left: parent
+                anchors.leftMargin: 0
+                Button {
+                    id: imageButton
+                    y: 2
+                    width: 48
+                    anchors.verticalCenterOffset: 20
+                    anchors.centerIn: parent
+                    background: null
+                    icon.name: "add-image"
+                    icon.color: "transparent"
+                    icon.cache: true
+                    icon.source: "../assets/icons8-image-48.png"
+                    onClicked: {
+                        if (addImageWrapper.visible === true){
+                            addImageWrapper.visible = false
+                            addImageWrapper.height = 0
+                        } else {
+                            addImageWrapper.visible = true
+                            addImageWrapper.height = column.height * 0.25
+                        }
+                    }
+                }
+
+            }
+
+            Rectangle {
+                id: audioRect
+                width: parent.width / 2
+                anchors.left: imageRect.right
+                anchors.leftMargin: 0
+                Button {
+                    id: audioButton
+                    y: 2
+                    width: 48
+                    anchors.verticalCenterOffset: 20
+                    anchors.horizontalCenterOffset: 0
+                    anchors.centerIn: parent
+                    background: null
+                    icon.name: "add-audio"
+                    icon.color: "transparent"
+                    icon.cache: true
+                    icon.source: "../assets/icons8-add-record-48.png"
+                    onClicked: {
+                        if (addAudioWrapper.visible === true){
+                            addAudioWrapper.visible = false
+                            addAudioWrapper.height = 0
+                        } else {
+                            addAudioWrapper.visible = true
+                            addAudioWrapper.height = column.height * 0.25
+                        }
+                    }
+                }
+            }
+        }
+
         Column {
             id: column
-            anchors.fill: parent
+            anchors.top: additionalFormatsRow.bottom
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.topMargin: 0
             spacing: 2
 
             ScrollView {
                 id: titleItem
                 anchors.top: parent.top
-                anchors.topMargin: 20
+                anchors.topMargin: 10
                 anchors.right: parent.right
                 anchors.rightMargin: 20
                 anchors.left: parent.left
@@ -178,6 +246,110 @@ Page {
                     KeyNavigation.priority: KeyNavigation.BeforeItem
                 }
             }
+
+            Rectangle {
+                visible: false
+                id: addImageWrapper
+                anchors.right: parent.right
+                anchors.rightMargin: 20
+                anchors.left: parent.left
+                anchors.leftMargin: 20
+                anchors.top: notesItem.bottom
+                anchors.topMargin: 30
+                color: "#262626"
+                width: parent.width
+                border.width: 1
+                border.color: "black"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: console.log('add image')
+                    Column{
+                        id: addImageColumn
+                        anchors.centerIn: parent
+                        anchors.fill: parent
+                        Button {
+                            anchors.centerIn: parent
+                            id: addImageButton
+                            width: 48
+                            icon.name: "add-new-image"
+                            icon.source: "../assets/icons8-add-image-24.png"
+                            icon.color: "white"
+                            background: null
+                        }
+                        Text {
+                            anchors.top: addImageButton.bottom
+                            anchors.topMargin: 10
+
+                            text: "Add Image"
+                            color: "white"
+                            anchors.left: addImageButton.right
+                            anchors.leftMargin: -50
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                visible: false
+                id: addAudioWrapper
+                anchors.right: parent.right
+                anchors.rightMargin: 20
+                anchors.left: parent.left
+                anchors.leftMargin: 20
+                anchors.top: addImageWrapper.bottom
+                anchors.topMargin: 30
+                color: "#262626"
+                width: parent.width
+                border.width: 1
+                border.color: "black"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: console.log('add audio')
+                    Column{
+                        id: addAudioColumn
+                        anchors.centerIn: parent
+                        anchors.fill: parent
+                        Button {
+                            anchors.centerIn: parent
+                            id: addAudioButton
+                            width: 48
+                            icon.name: "add-new-audio"
+                            icon.source: "../assets/icons8-add-record-48.png"
+                            icon.color: "white"
+                            background: null
+                        }
+                        Text {
+                            anchors.top: addAudioButton.bottom
+                            anchors.topMargin: 10
+
+                            text: "Add a recording"
+                            color: "white"
+                            anchors.left: addAudioButton.right
+                            anchors.leftMargin: -55
+                        }
+                    }
+                }
+            }
+
+        }
+
+        Menu {
+            id: optionsMenu
+            MenuItem {
+                text: "Add Checkbox"
+                onTriggered: {
+
+                }
+            }
+
+            MenuItem {
+                text: "Add Image"
+                onTriggered: {
+                    console.log("select image")
+                }
+            }
+
+            MenuItem { text: "Record Audio" }
         }
     }
 }

@@ -10,7 +10,6 @@ Pane {
     property string currTitle
     property string currNotes
 
-    anchors.bottom: parent
     anchors.bottomMargin: 3
 
     background: Rectangle {
