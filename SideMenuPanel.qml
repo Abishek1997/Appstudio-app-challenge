@@ -69,7 +69,7 @@ Page{
                         Layout.preferredWidth: 24*app.scaleFactor
                         Layout.preferredHeight: 24*app.scaleFactor
                         radius: 12*app.scaleFactor
-                        color: listView.currentIndex === index? app.accentColor : "#9E9E9E"
+                        color: listView.currentIndex === index? "#892cdc" : "#9E9E9E"
                     }
                     Item{
                         Layout.preferredWidth: 36*app.scaleFactor

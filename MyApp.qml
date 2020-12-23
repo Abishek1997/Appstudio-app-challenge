@@ -37,8 +37,8 @@ import "controller"
 
 App{
     id: app
-    width: 421
-    height: 750
+    width: parent.width
+    height: parent.height
 
     property bool lightTheme: true
     property int menuCurrentIndex: 0

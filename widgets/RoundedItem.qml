@@ -6,6 +6,7 @@ import QtQuick.Controls.Material.impl 2.12
 Pane {
     id: control
     property int radius: 2
+    Material.elevation: 15
     property int index
     property string currTitle
     property string currNotes
@@ -14,7 +15,7 @@ Pane {
 
     background: Rectangle {
         anchors.fill: parent
-        color: control.Material.backgroundColor
+        color: "#52057b"
         radius: control.Material.elevation > 0 ? control.radius : 0
 
         layer.enabled: control.enabled && control.Material.elevation > 0

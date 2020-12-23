@@ -5,6 +5,7 @@ import QtQuick.Controls.Material 2.13
 import ArcGIS.AppFramework 1.0
 import QtQuick.Controls.Material 2.12
 import QtQuick.Controls.Material.impl 2.12
+import QtGraphicalEffects 1.12
 
 import "../widgets"
 
@@ -93,9 +94,21 @@ Page {
 
             model: dataModel.listModel
             delegate: RoundedListItem{
+                width: parent.width
+                id: roundedListItem
                 title: titleText
                 details: notesText
                 index: id
+            }
+
+            DropShadow {
+                anchors.fill: roundedListItem
+                horizontalOffset: 3
+                verticalOffset: 3
+                radius: 8.0
+                samples: 17
+                color: "#80000000"
+                source: roundedListItem
             }
         }
     }

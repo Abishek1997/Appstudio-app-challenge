@@ -8,7 +8,7 @@ RoundedItem {
     property alias details: noteDetails.text
     property int currentIndex
 
-    Material.elevation: 10
+    Material.elevation: 15
     radius: 10
     index: currentIndex
     currTitle: title
@@ -17,10 +17,23 @@ RoundedItem {
     ColumnLayout{
         anchors.fill: parent
         Text {
+            color: "white"
+            font.family: "Helvetica"
+            font.bold: Font.Black
+            font.pointSize: 13
             id: noteTitle
         }
-        Text {
-            id: noteDetails;
+
+        CustomVerticalSpacing{
+            size: 10
         }
+
+        Text {
+            color: "white"
+            font.family: "Helvetica"
+            font.bold: Font.Medium
+            font.pointSize: 10
+            id: noteDetails;
+        }        
     }
 }

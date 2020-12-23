@@ -25,11 +25,26 @@ Page {
 
     Component.onCompleted: {
         controller.readImagePath(notesIndex);
+
         var component;
         var object;
         component = Qt.createComponent("ImageLayout.qml");
         var height = titleItem.height + titleField.height + notesItem.height + notesField.height + 100;
         object = component.createObject(column, {"x": 20, "y": height});
+
+        controller.readAudioPath(notesIndex);
+
+        var audioLayoutComponent;
+        var audioLayoutObject;
+        audioLayoutComponent = Qt.createComponent("AudioLayout.qml");
+        var audioLayoutHeight = titleItem.height + titleField.height + notesItem.height + notesField.height + parent.height * 0.2 + 100;
+        if( audioLayoutComponent.status !== Component.Ready )
+        {
+            if( audioLayoutComponent.status === Component.Error )
+                console.debug("Error:"+ audioLayoutComponent.errorString() );
+            return;
+        }
+        audioLayoutObject = audioLayoutComponent.createObject( column, {"x": 20, "y": audioLayoutHeight} );
     }
 
     header: ToolBar{
@@ -108,7 +123,10 @@ Page {
                     id: contextMenu
                     MenuItem {
                         text: "Send"
-                        onTriggered: console.log("send clicked")
+                        onTriggered: {
+                            console.log('send clicked..');
+                            AppFramework.clipboard.share(titleField.text + "\n\n" + notesField.text);
+                        }
                     }
                     MenuItem {
                         text: "Delete"
@@ -125,13 +143,16 @@ Page {
         }
     }
 
-    Rectangle{
+    ScrollView{
         id: titleSection
-        anchors.fill: parent
-        color: "#262626"
+        width: parent.width
+        height: parent.height
+        clip: true
 
-        ScrollView {
+        Rectangle {
             anchors.fill: parent
+            color: "#262626"
+
             Row {
                 id: additionalFormatsRow
                 width: parent.width
@@ -178,7 +199,7 @@ Page {
                         icon.cache: true
                         icon.source: "../assets/icons8-add-record-48.png"
                         onClicked: {
-
+                            audioFileDialog.open();
                         }
                     }
                 }
@@ -206,7 +227,7 @@ Page {
 
                         id: titleField
                         background: null
-                        placeholderText: qsTr("Title")
+                        placeholderText: qsTr("Title *")
                         placeholderTextColor: "#d4d4d4"
                         color: "#d4d4d4"
                         text: titleText
@@ -266,11 +287,43 @@ Page {
                     var object;
                     component = Qt.createComponent("ImageLayout.qml");
                     var height = titleItem.height + titleField.height + notesItem.height + notesField.height + 100;
-                    object = component.createObject(column, {"x": 20, "y": height});
+                    object = component.createObject(column, {"x": 20, "y": height, "index": notesIndex});
                 }
                 onRejected: {
                     console.log("rejected");
                 }
+                Component.onCompleted: visible = false
+            }
+
+            FileDialog {
+                id: audioFileDialog
+                title: "Please choose a file"
+                nameFilters: "Audio files (*.wav *.mp3 *aac *m4a *mp4)"
+                onAccepted: {
+                    console.log("You chose: " + audioFileDialog.fileUrls)
+                    if (notesIndex > 0){
+                        controller.storeAudioPath(notesIndex, audioFileDialog.fileUrls);
+                    } else {
+                        controller.storeAudioPath(dataModel.todos.length + 1, audioFileDialog.fileUrls);
+                    }
+                    console.log('before obj generation: ', dataModel.audioPathModel.count);
+                    var audioLayoutComponent;
+                    var audioLayoutObject;
+                    audioLayoutComponent = Qt.createComponent("AudioLayout.qml");
+                    var audioLayoutHeight = titleItem.height + titleField.height + notesItem.height + notesField.height + parent.height * 0.2 + 100;
+                    if( audioLayoutComponent.status !== Component.Ready )
+                    {
+                        if( audioLayoutComponent.status === Component.Error )
+                            console.debug("Error:"+ audioLayoutComponent.errorString() );
+                        return;
+                    }
+                    audioLayoutObject = audioLayoutComponent.createObject( column, {"x": 20, "y": audioLayoutHeight} );
+                }
+
+                onRejected: {
+                    console.log("rejected");
+                }
+
                 Component.onCompleted: visible = false
             }
         }
