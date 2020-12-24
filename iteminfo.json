@@ -1,5 +1,5 @@
 {
-    "access": "private",
+    "access": "org",
     "accessInformation": "AppStudio team",
     "appCategories": [
     ],
@@ -26,11 +26,11 @@
     "largeThumbnail": null,
     "licenseInfo": null,
     "listed": false,
-    "modified": 1608696352000,
+    "modified": 1608774668000,
     "name": "7e546065115244c0abe8377ac66e6424.zip",
-    "numComments": 9,
+    "numComments": 11,
     "numRatings": 0,
-    "numViews": 9,
+    "numViews": 11,
     "owner": "appstudiointerviewaccount",
     "ownerFolder": null,
     "properties": null,
@@ -39,7 +39,7 @@
     "scoreCompleteness": 23,
     "screenshots": [
     ],
-    "size": 65726,
+    "size": 65975,
     "snippet": "A simple note-taking application",
     "spatialReference": null,
     "subInfo": 0,
